@@ -71,5 +71,13 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
+    },
+    "h5" : {
+        "devServer" : {
+            "port" : 20205
+        },
+        "router" : {
+            "mode" : "history"
+        }
     }
 }
