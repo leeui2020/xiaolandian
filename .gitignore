@@ -1,0 +1,11 @@
+public/media
+egg-multipart-tmp
+logs
+node_modules
+run
+typings
+.travis.yml
+appveyor.yml
+jsconfig.json
+package-lock.json
+unpackage

@@ -1,0 +1,41 @@
+{
+	"pages": [
+		{
+            "path" : "pages/index/index",
+            "style" : {
+				"navigationStyle":"custom",
+				"navigationBarTitleText":"小蓝店"
+			}
+        },
+		{
+            "path" : "pages/login/login",
+            "style" : {
+				"navigationBarTitleText":"登录"
+			}
+        },
+		{
+            "path" : "pages/regist/regist",
+            "style" : {
+				"navigationBarTitleText":"注册"
+			}
+        },
+		{
+            "path" : "pages/order/order",
+            "style" : {
+				"navigationBarTitleText":"确认订单"
+			}
+        },
+		{
+            "path" : "pages/addaddress/addaddress",
+            "style" : {
+				"navigationBarTitleText":"添加新地址"
+			}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "抢免单",
+		"navigationBarBackgroundColor": "#007aff",
+		"backgroundColor": "#F8F8F8"
+	}
+}
