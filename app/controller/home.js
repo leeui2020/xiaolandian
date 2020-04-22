@@ -9,7 +9,7 @@ class HomeController extends Controller {
 
   async admin() {
     const { ctx } = this;
-    await ctx.redirect(`http://localhost:8080/admin${ctx.params[0] || '/'}`);
+    await ctx.redirect(`http://localhost:20204/admin${ctx.params[0] || '/'}`);
   }
 }
 

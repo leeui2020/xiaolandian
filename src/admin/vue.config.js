@@ -11,6 +11,7 @@ module.exports = {
   },
 
   devServer: {
+    port: 20204,
     proxy: 'http://localhost:20203'
   }
 }

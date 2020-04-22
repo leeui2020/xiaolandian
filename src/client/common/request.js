@@ -17,6 +17,12 @@ export default {
 					if (res.data.token) {
 						store.commit('setToken', res.data.token)
 					}
+					
+					// 验证失败，退出登录
+					if (res.data.errcode === 403) {
+						store.dispatch('logout')
+					}
+					
 					resolve(res)
 				},
 				fail: reject

@@ -1,4 +1,4 @@
-public/media
+app/public/media
 egg-multipart-tmp
 logs
 node_modules

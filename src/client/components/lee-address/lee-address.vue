@@ -11,7 +11,7 @@
 				:city="v.city"
 				:address="v.address"
 				@click="selectHandler(v)"
-				hideEdit
+				@edit="gotoEditAddressPage(v)"
 			></lee-address-card>
 		</view>
 		<button type="primary" @click="gotoAddAddressPage">添加新地址</button>
@@ -45,6 +45,13 @@
 			gotoAddAddressPage() {
 				uni.navigateTo({
 					url: '/pages/addaddress/addaddress'
+				})
+			},
+			
+			// 跳转到编辑地址页面
+			gotoEditAddressPage(item) {
+				uni.navigateTo({
+					url: `/pages/editaddress/editaddress?_id=${item._id}`
 				})
 			},
 			

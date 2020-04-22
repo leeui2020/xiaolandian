@@ -30,6 +30,11 @@
             "style" : {
 				"navigationBarTitleText":"添加新地址"
 			}
+        }, {
+            "path" : "pages/editaddress/editaddress",
+            "style" : {
+				"navigationBarTitleText":"编辑地址"
+			}
         }
     ],
 	"globalStyle": {
