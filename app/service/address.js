@@ -56,6 +56,18 @@ class AddressService extends Service {
       await address.setDefault()
     }
   }
+
+  // 删除地址
+  async remove(opts = {}) {
+    const { ctx } = this;
+    const { _id } = opts;
+    const userId = ctx.user._id;
+    const address = await ctx.model.Address.findOne({ _id, userId });
+    if (!address) {
+      return new Error('地址不存在');
+    }
+    await address.remove();
+  }
 }
 
 module.exports = AddressService;

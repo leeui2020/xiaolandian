@@ -25,8 +25,9 @@ class ProductService extends Service {
       .sort({ createdAt: -1 });
     const total = await ctx.model.Product.countDocuments();
     const list = data.map(item => {
-      const src = item.thumbnail.src;
+      const src = item.thumbnail && item.thumbnail.src;
       const product = item.toObject();
+      product.thumbnail = product.thumbnail || {};
       product.thumbnail.src = src;
       return product;
     });
@@ -63,7 +64,8 @@ class ProductService extends Service {
       return new Error('产品不存在');
     }
     const data = product.toObject();
-    data.thumbnail.src = product.thumbnail.src;
+    data.thumbnail = data.thumbnail || {};
+    data.thumbnail.src = product.thumbnail && product.thumbnail.src;
     return data;
   }
 }

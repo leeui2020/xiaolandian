@@ -1,6 +1,8 @@
 <template>
 	<view v-if="address">
-		<lee-address-form :defaults="address" @submit="submitHandler" />
+		<lee-address-form :defaults="address" @submit="submitHandler">
+			<button class="btn" type="warn" @click="removeAddress">删除</button>
+		</lee-address-form>
 	</view>
 </template>
 
@@ -43,11 +45,44 @@
 					uni.navigateBack()
 					this.$store.dispatch('getAddress')
 				})
+			},
+			
+			// 删除地址
+			removeAddress() {
+
+				const next = async () => {
+					uni.showLoading({ title: '正在删除' })
+					const { data: res } = await this.$http.post('/address/remove', {
+						_id: this.address._id
+					})
+					uni.hideLoading()
+					if (res.status !== 'ok') {
+						uni.showToast({
+							icon: 'none',
+							title: res.errmsg
+						})
+						return
+					}
+					uni.navigateBack()
+					this.$store.dispatch('getAddress')
+				}
+				
+				uni.showModal({
+					title: '删除提示',
+					content: '确定删除此地址吗？',
+					success: ({ confirm }) => {
+						if (confirm) {
+							next()
+						}
+					},
+				})
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-
+	.btn {
+		margin: $spacing-base;
+	}
 </style>

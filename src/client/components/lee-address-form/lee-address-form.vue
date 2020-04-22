@@ -27,6 +27,7 @@
 			></uni-list-item>
 		</uni-list>
 		<button type="primary" @click="saveBtnHandler">保存</button>
+		<slot></slot>
 		
 		<!-- 选择城市 -->
 		<uni-popup ref="popup" type="bottom">
@@ -48,7 +49,7 @@
 		props: {
 			defaults: {
 				type: Object,
-				default: () => {}
+				default: () => ({})
 			}
 		},
 		data() {

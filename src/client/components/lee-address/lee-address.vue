@@ -21,7 +21,6 @@
 <script>
 	import { mapState, mapActions } from 'vuex'
 	import LeeAddressCard from './lee-address-card.vue'
-	let addressLoaded = false
 	
 	export default {
 		components: {
@@ -35,10 +34,7 @@
 			...mapState(['address'])
 		},
 		async created() {
-			if (!addressLoaded) {
-				await this.getAddress()
-				addressLoaded = true
-			}
+			await this.getAddress()
 		},
 		methods: {
 			// 跳转到添加地址页面

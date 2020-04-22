@@ -75,12 +75,9 @@
     "h5" : {
         "devServer" : {
             "port" : 20205
-<<<<<<< HEAD
         },
         "router" : {
             "mode" : "history"
-=======
->>>>>>> f3dc9976c76db9fba51495a4f234ec29415548b2
         }
     }
 }

@@ -34,8 +34,11 @@ module.exports = ({ mongoose, config }) => {
   });
 
   MediaSchema.pre('remove', function(next) {
-    fs.unlinkSync(path.join(config.mediaDir, this.fileName));
-    next();
+    try {
+      fs.unlinkSync(path.join(config.mediaDir, this.fileName));
+    } finally {
+      next();
+    }
   });
 
   return mongoose.model('Media', MediaSchema, 'Media');

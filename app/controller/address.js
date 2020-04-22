@@ -56,6 +56,13 @@ class AddressController extends Controller {
     });
     await ctx.handler(await ctx.service.address.edit(ctx.request.body));
   }
+
+  // 删除地址
+  async remove() {
+    const { ctx } = this;
+    ctx.validate({ _id: { type: 'string' } });
+    await ctx.handler(await ctx.service.address.remove(ctx.request.body));
+  }
 }
 
 module.exports = AddressController;

@@ -35,7 +35,7 @@
 		<view class="bar">
 			<text>合计：</text>
 			<text class="price">{{ totalFee | priceFormatter }}</text>
-			<button class="action" type="primary">结算</button>
+			<button class="action" type="primary" @click="submitHandler">结算</button>
 		</view>
 		<!-- 结算栏END -->
 		
@@ -107,6 +107,30 @@
 			selectAddressHandler(item) {
 				this.address = item
 				this.$refs.popup.close()
+			},
+			
+			// 点击结算按钮
+			async submitHandler() {
+				const { goods, count, address } = this
+				const showErr = title => uni.showToast({
+					icon: 'none',
+					title
+				})
+				
+				if (!goods) return showErr('请选择商品')
+				if (!address) return showErr('请选择收货地址')
+				
+				uni.showLoading({ title: '正在提交' })
+				const { data: res } = await this.$http.post('/order/create', {
+					count,
+					productId: goods._id,
+					addressId: address._id
+				})
+				uni.hideLoading()
+				if (res.status !== 'ok') {
+					return showErr(res.errmsg)
+				}
+				
 			}
 		}
 	}
