@@ -30,6 +30,32 @@ class AddressController extends Controller {
     const { ctx } = this;
     await ctx.handler(await ctx.service.address.list());
   }
+
+  // 查询单个地址详情
+  async detail() {
+    const { ctx } = this;
+    ctx.validate({ _id: { type: 'string' } });
+    await ctx.handler(await ctx.service.address.detail(ctx.request.body));
+  }
+
+  // 编辑地址
+  async edit() {
+    const { ctx } = this;
+    ctx.validate({
+      _id: { type: 'string' },
+      modify: {
+        type: 'object',
+        rules: {
+          name: { type: 'string', required: false },
+          phone: { type: 'phone', required: false },
+          city: { type: 'array', itemType: 'string', required: false },
+          address: { type: 'string', required: false },
+          isDefault: { type: 'bool', required: false },
+        },
+      },
+    });
+    await ctx.handler(await ctx.service.address.edit(ctx.request.body));
+  }
 }
 
 module.exports = AddressController;

@@ -43,7 +43,7 @@
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
 				<view class="caption">收货地址</view>
-				<lee-address @select="selectAddressHandler" />
+				<lee-address @select="selectAddressHandler" showEdit />
 			</view>
 		</uni-popup>
 		<!-- 选择收货地址END -->

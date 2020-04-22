@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import request from '@/common/request.js'
+import { checkUser } from '@/common/utils.js'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -26,6 +27,12 @@ const store = new Vuex.Store({
 			if (res.status === 'ok') {
 				ctx.commit('updateAddress', res.data)
 			}
+		},
+		
+		// 退出登录
+		async logout(ctx) {
+			ctx.commit('setUser', null)
+			checkUser(() => {})
 		}
 	},
 	

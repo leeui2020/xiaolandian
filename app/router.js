@@ -34,6 +34,8 @@ module.exports = app => {
 
   router.post('/address/add', authYouKe, controller.address.add);
   router.post('/address/list', authYouKe, controller.address.list);
+  router.post('/address/detail', authYouKe, controller.address.detail);
+  router.post('/address/edit', authYouKe, controller.address.edit);
 
   router.get('/', controller.home.index);
   router.get(/\/admin(\/.+)*/, controller.home.admin);
