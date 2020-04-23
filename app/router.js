@@ -43,6 +43,7 @@ module.exports = app => {
   router.post('/order/close', authAdmin, controller.order.close);
   router.post('/order/search', authYouKe, controller.order.search);
   router.post('/order/remove', authYouKe, controller.order.remove);
+  router.post('/order/cancel', authYouKe, controller.order.cancel);
 
   router.get('/', controller.home.index);
   router.get(/\/admin(\/.+)*/, controller.home.admin);

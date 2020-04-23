@@ -50,6 +50,13 @@ class OrderController extends Controller {
     ctx.validate({ _id: { type: 'string' } });
     await ctx.handler(await ctx.service.order.remove(ctx.request.body));
   }
+
+  // 用户取消订单
+  async cancel() {
+    const { ctx } = this;
+    ctx.validate({ _id: { type: 'string'} });
+    await ctx.handler(await ctx.service.order.cancel(ctx.request.body));
+  }
 }
 
 module.exports = OrderController;

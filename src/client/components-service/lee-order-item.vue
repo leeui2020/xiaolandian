@@ -2,11 +2,16 @@
 	<view class="order">
 		<!-- 产品信息 -->
 		<view class="order-product">
-			<image class="order-product-image" :src="item.productSnapShot.thumbnail"></image>
+			<image
+				class="order-product-image"
+				:src="item.productSnapShot.thumbnail"
+			></image>
 			<view class="order-product-info">
 				<view class="order-product-title">{{ item.productSnapShot.name }}</view>
 				<view class="order-product-footer">
-					<view class="order-product-price">{{ item.productSnapShot.price | priceFormatter }}</view>
+					<view class="order-product-price">
+						{{ item.productSnapShot.price | priceFormatter }}
+					</view>
 					<view class="order-product-count">x{{ item.count }}</view>
 				</view>
 			</view>
@@ -25,12 +30,26 @@
 				<view class="order-status">{{ item.status }}</view>
 				<!-- 操作 -->
 				<view class="order-options">
-					<view class="order-options-item" v-if="item.timeClosed" @click="removeBtnHandler">删除订单</view>
+					<view
+						class="order-options-item"
+						v-if="item.timeClosed"
+						@click="removeBtnHandler"
+					>删除订单</view>
 					<block v-else>
-						<view class="order-options-item primary" v-if="!item.timePayed">去付款</view>
-						<view class="order-options-item" v-if="!item.timePayed">取消订单</view>
+						<view
+							class="order-options-item primary"
+							v-if="!item.timePayed"
+						>去付款</view>
+						<view
+							class="order-options-item"
+							v-if="!item.timePayed"
+							@click="cancelBtnHandler"
+						>取消订单</view>
 						
-						<view class="order-options-item primary" v-if="item.timeConsign">确认收货</view>
+						<view
+							class="order-options-item primary"
+							v-if="item.timeConsign"
+						>确认收货</view>
 					</block>
 					<view class="order-options-item" v-if="item.nu">查看物流</view>
 				</view>
@@ -55,6 +74,11 @@
 			// 派发删除事件
 			removeBtnHandler() {
 				this.$emit('remove')
+			},
+			
+			// 派发取消事件
+			cancelBtnHandler() {
+				this.$emit('cancel')
 			}
 		}
 	}

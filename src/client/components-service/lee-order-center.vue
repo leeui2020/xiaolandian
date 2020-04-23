@@ -14,6 +14,7 @@
 				class="list-item"
 				v-for="(v, k) of list"
 				@remove="removeOrder(v)"
+				@cancel="cancelOrder(v)"
 			/>
 		</view>
 	</scroll-view>
@@ -102,8 +103,8 @@
 					success: async ({ confirm }) => {
 						if (!confirm) return
 						uni.showLoading({ title: '正在删除' })
-						const { _id } = item
-						const { data: res } = await this.$http.post('/order/remove', { _id })
+						const { data: res } = await this.$http
+							.post('/order/remove', { _id: item._id })
 						uni.hideLoading()
 						if (res.status !== 'ok') {
 							uni.showToast({ icon: 'none', title: res.errmsg })
@@ -112,6 +113,27 @@
 						uni.showToast({ title: '删除成功' })
 						await this.getOrderList(1, true)
 					},
+				})
+			},
+			
+			// 取消订单
+			cancelOrder(item) {
+				uni.showModal({
+					title: '取消提示',
+					content: '是否取消订单？',
+					success: async ({ confirm }) => {
+						if (!confirm) return
+						uni.showLoading({ title: '正在取消' })
+						const { data: res } = await this.$http
+							.post('/order/cancel', { _id: item._id })
+						uni.hideLoading()
+						if (res.status !== 'ok') {
+							uni.showToast({ icon: 'none', title: res.errmsg })
+							return
+						}
+						uni.showToast({ title: '取消成功' })
+						await this.getOrderList(1, true)
+					}
 				})
 			}
 		}

@@ -31,10 +31,10 @@
 <script>
 	export default {
 		data() {
-			return {
+			return Object.assign({
 				email: '',
 				password: ''
-			}
+			}, uni.getStorageSync('lastLogin'))
 		},
 		methods: {
 			// 切换到注册页面
@@ -87,6 +87,10 @@
 				const url = this.$route.query.from
 					? decodeURI(this.$route.query.from) : 'pages/index/index'
 				uni.redirectTo({ url: '/' + url })
+				uni.setStorageSync('lastLogin', {
+					email: this.email,
+					password: this.password
+				})
 			}
 		}
 	}

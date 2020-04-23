@@ -121,6 +121,28 @@ class OrderService extends Service {
     }
     await order.remove();
   }
+
+  // 用户取消订单
+  async cancel(opts = {}) {
+    const { ctx } = this;
+    const { _id } = opts;
+    const userId = ctx.user._id;
+    const order = await ctx.model.Order.findOne({ _id, userId });
+    if (!order) {
+      return new Error('订单不存在');
+    }
+    if (order.timeClosed) {
+      return new Error('订单已关闭');
+    }
+    if (order.timePayed) {
+      return new Error('暂不支持关闭已支付订单');
+    }
+    await order.updateOne({
+      $set: {
+        timeClosed: new Date(),
+      },
+    });
+  }
 }
 
 module.exports = OrderService;
