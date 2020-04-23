@@ -24,6 +24,7 @@
 			<!-- 商品END -->
 		</lee-tabs>
 		
+		<lee-fav-nav></lee-fav-nav>
 	</view>
 </template>
 
@@ -31,13 +32,15 @@
 	import LeeTabs from '@/components/lee-tabs.vue'
 	import LeeSearch from '@/components/lee-search.vue'
 	import LeeShop from '@/components/lee-shop.vue'
+	import LeeFavNav from '@/components/lee-fav-nav/lee-fav-nav.vue'
 	import { mapMutations } from 'vuex'
 	
 	export default {
 		components: {
 			LeeTabs,
 			LeeSearch,
-			LeeShop
+			LeeShop,
+			LeeFavNav
 		},
 		data() {
 			return {

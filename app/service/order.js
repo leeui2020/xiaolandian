@@ -42,6 +42,85 @@ class OrderService extends Service {
     ctx.logger.info('创建了订单 %j', order);
     return { no, cornet };
   }
+
+  // 管理员查看订单列表
+  async list(opts = {}) {
+    const { ctx } = this;
+    const { page, pagesize } = opts;
+    const data = await ctx.model.Order.find()
+      .populate('userId', '_id email nickName')
+      .populate('productSnapShot.thumbnail', 'fileName src')
+      .skip((page - 1) * pagesize)
+      .limit(pagesize)
+      .sort({ createdAt: -1 });
+    const total = await ctx.model.Order.countDocuments();
+    const list = data.map(item => {
+      const order = item.toObject();
+      order.status = item.status;
+      order.productSnapShot.thumbnail = item.productSnapShot.thumbnail && item.productSnapShot.thumbnail.src;
+      return order;
+    });
+    return { page, pagesize, list, total };
+  }
+
+  // 管理员关闭订单
+  async close(opts = {}) {
+    const { ctx } = this;
+    const { _id } = opts;
+    const order = await ctx.model.Order.findOne({
+      _id,
+      timeClosed: { $exists: false },
+    });
+
+    if (!order) {
+      return new Error('订单不存在或已关闭');
+    }
+
+    await order.updateOne({
+      $set: {
+        timeClosed: new Date(),
+      },
+    });
+    ctx.logger.info('关闭订单：[%s]', order.cornet);
+  }
+
+  // 用户查询订单列表
+  async search(opts = {}) {
+    const { ctx } = this;
+    const { page, pagesize, filter } = opts;
+    const userId = ctx.user._id;
+    const query = Object.assign({ userId }, filter);
+    const data = await ctx.model.Order.find(query)
+      .populate('userId', '_id email nickName')
+      .populate('productSnapShot.thumbnail', 'fileName src')
+      .skip((page - 1) * pagesize)
+      .limit(pagesize)
+      .sort({ createdAt: -1 });
+    const total = await ctx.model.Order.countDocuments(query);
+    const list = data.map(item => {
+      const order = item.toObject();
+      order.status = item.status;
+      order.productSnapShot.thumbnail = item.productSnapShot.thumbnail && item.productSnapShot.thumbnail.src;
+      return order;
+    });
+    return { page, pagesize, list, total };
+  }
+
+  // 用户删除订单
+  async remove(opts = {}) {
+    const { ctx } = this;
+    const { _id } = opts;
+    const userId = ctx.user._id;
+    const order = await ctx.model.Order.findOne({
+      _id,
+      userId,
+      timeClosed: { $exists: true },
+    });
+    if (!order) {
+      return new Error('订单不存在或未关闭');
+    }
+    await order.remove();
+  }
 }
 
 module.exports = OrderService;

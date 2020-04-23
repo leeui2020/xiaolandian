@@ -57,7 +57,8 @@
 				init: false,
 				goods: null,
 				count: 1,
-				address: null
+				address: null,
+				confirm: false
 			}
 		},
 		computed: {
@@ -95,7 +96,7 @@
 			
 			// 数量变化监听
 			countChangeHandler(count) {
-				this.count = count
+				this.count = Number(count)
 			},
 			
 			// 打开选择收货地址弹窗
@@ -111,6 +112,7 @@
 			
 			// 点击结算按钮
 			async submitHandler() {
+				if (this.confirm) return
 				const { goods, count, address } = this
 				const showErr = title => uni.showToast({
 					icon: 'none',
@@ -130,7 +132,7 @@
 				if (res.status !== 'ok') {
 					return showErr(res.errmsg)
 				}
-				
+				this.confirm = true
 			}
 		}
 	}

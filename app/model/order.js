@@ -16,6 +16,13 @@ module.exports = ({ mongoose, model }) => {
       required: true,
     },
 
+    // 物流单号
+    nu: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+
     // 短号
     cornet: {
       type: String,
@@ -114,6 +121,20 @@ module.exports = ({ mongoose, model }) => {
       const userIdPrefix = md5(String(_id)).substr(0, 2);
       return [userIdPrefix, timePrefix, nonceStr, cornet].join('').toUpperCase();
     },
+  });
+
+  // 订单状态
+  OrderSchema.virtual('status').get(function() {
+    if (this.timeClosed) {
+      if (this.timeRefund) return '已退款';
+      if (this.timeConsign) return '已交付';
+      return '已关闭';
+    }
+
+    if (this.timeRefund) return '退款中';
+    if (this.timeConsign) return '已发货';
+    if (this.timePayed) return '待发货';
+    return '待支付';
   });
 
   return mongoose.model('Order', OrderSchema, 'Order');

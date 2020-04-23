@@ -3,7 +3,7 @@ export default [
     name: 'root',
     path: '/',
     component: () => import('@/components/LeeFrame'),
-    redirect: '/product',
+    redirect: '/order',
     children: [
       {
         name: 'Index',
@@ -27,6 +27,14 @@ export default [
         component: () => import('@/views/Product'),
         meta: {
           title: '产品管理'
+        }
+      },
+      {
+        name: 'Order',
+        path: '/order',
+        component: () => import('@/views/Order'),
+        meta: {
+          title: '订单管理'
         }
       }
     ]

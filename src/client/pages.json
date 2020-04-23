@@ -35,6 +35,12 @@
             "style" : {
 				"navigationBarTitleText":"编辑地址"
 			}
+        }, {
+            "path" : "pages/order-list/order-list",
+            "style" : {
+				"navigationStyle":"custom",
+				"navigationBarTitleText":"订单中心"
+			}
         }
     ],
 	"globalStyle": {

@@ -10,6 +10,11 @@ export default [
     icon: 'fa fa-product-hunt'
   },
   {
+    id: '/order',
+    name: '订单管理',
+    icon: 'fa fa-wpforms'
+  },
+  {
     id: '/media',
     name: '媒体库',
     icon: 'fa fa-archive'
