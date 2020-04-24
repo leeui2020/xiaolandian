@@ -52,7 +52,7 @@ class OrderService extends Service {
       .populate('productSnapShot.thumbnail', 'fileName src')
       .skip((page - 1) * pagesize)
       .limit(pagesize)
-      .sort({ createdAt: -1 });
+      .sort({ updatedAt: -1 });
     const total = await ctx.model.Order.countDocuments();
     const list = data.map(item => {
       const order = item.toObject();
@@ -95,7 +95,7 @@ class OrderService extends Service {
       .populate('productSnapShot.thumbnail', 'fileName src')
       .skip((page - 1) * pagesize)
       .limit(pagesize)
-      .sort({ createdAt: -1 });
+      .sort({ updatedAt: -1 });
     const total = await ctx.model.Order.countDocuments(query);
     const list = data.map(item => {
       const order = item.toObject();
@@ -252,6 +252,25 @@ class OrderService extends Service {
       to: order.userId.email,
       subject: `发布通知`,
       text: `您购买的商品：【${order.productSnapShot.name}】x${order.count} 已发货；物流单号：${nu}，您可以前往平台查看实时物流。`,
+    });
+  }
+
+  // 用户确认收货
+  async confirm(opts = {}) {
+    const { ctx } = this;
+    const order = await ctx.model.Order.findOne({
+      _id: opts._id,
+      userId: ctx.user._id,
+      timeClosed: { $exists: false },
+      timeConsign: { $exists: true },
+    });
+    if (!order) {
+      return new Error('订单不存在或已关闭');
+    }
+    await order.updateOne({
+      $set: {
+        timeClosed: new Date(),
+      },
     });
   }
 }

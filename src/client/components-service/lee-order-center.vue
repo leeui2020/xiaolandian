@@ -16,6 +16,7 @@
 				@remove="removeOrder(v)"
 				@cancel="cancelOrder(v)"
 				@pay="payOrder(v)"
+				@confirm="confirmOrder(v)"
 			/>
 		</view>
 		<view class="nomore" v-if="total === list.length">- 没有更多了 -</view>
@@ -154,6 +155,26 @@
 			// 上拉刷新
 			async refreshData() {
 				await this.getOrderList(1, true)
+			},
+			
+			// 确认收货
+			confirmOrder(item) {
+				uni.showModal({
+					title: '提示',
+					content: '是否已经收到货了？',
+					success: async ({ confirm }) => {
+						if (!confirm) return
+						uni.showLoading({ title: '正在加载' })
+						const { data: res } = await this.$http.post('/order/confirm', { _id: item._id })
+						uni.hideLoading()
+						if (res.status !== 'ok') {
+							uni.showToast({ icon: 'none', title: res.errmsg })
+							return
+						}
+						uni.showToast({ title: '收货完成' })
+						await this.getOrderList(1, true)
+					}
+				})
 			}
 		}
 	}

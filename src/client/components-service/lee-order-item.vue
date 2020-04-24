@@ -50,9 +50,10 @@
 						<view
 							class="order-options-item primary"
 							v-if="item.timeConsign"
+							@click="confirmHandler"
 						>确认收货</view>
 					</block>
-					<view class="order-options-item" v-if="item.nu">查看物流</view>
+					<view class="order-options-item" v-if="item.nu" @click="gotoWuliuPage()">查看物流</view>
 				</view>
 				<!-- 操作END -->
 			</view>
@@ -85,6 +86,18 @@
 			// 派发付款事件
 			payBtnHandler() {
 				this.$emit('pay')
+			},
+			
+			// 派发确认收货事件
+			confirmHandler() {
+				this.$emit('confirm')
+			},
+			
+			// 查看物流
+			gotoWuliuPage() {
+				uni.navigateTo({
+					url: `/pages/wuliu/wuliu?nu=${this.item.nu}`
+				})
 			}
 		}
 	}

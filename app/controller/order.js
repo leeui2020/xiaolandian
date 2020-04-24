@@ -96,6 +96,13 @@ class OrderController extends Controller {
     });
     await ctx.handler(await ctx.service.order.consign(ctx.request.body));
   }
+
+  // 用户确认收货
+  async confirm() {
+    const { ctx } = this;
+    ctx.validate({ _id: { type: 'string' } });
+    await ctx.handler(await ctx.service.order.confirm(ctx.request.body));
+  }
 }
 
 module.exports = OrderController;

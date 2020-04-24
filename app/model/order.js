@@ -134,7 +134,7 @@ module.exports = ({ mongoose, model }) => {
   OrderSchema.virtual('status').get(function() {
     if (this.timeClosed) {
       if (this.timeRefund) return '已退款';
-      if (this.timeConsign) return '已交付';
+      if (this.timeConsign) return '已收货';
       return '已关闭';
     }
 

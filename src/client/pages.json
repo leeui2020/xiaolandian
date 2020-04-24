@@ -47,6 +47,11 @@
             "style" : {
 				"navigationBarTitleText":"收银台"
 			}
+        }, {
+            "path" : "pages/wuliu/wuliu",
+            "style" : {
+				"navigationBarTitleText":"物流跟踪"
+			}
         }
     ],
 	"globalStyle": {
