@@ -4,6 +4,6 @@ module.exports = appInfo => {
   /** @type {Egg.EggAppConfig} */
   const config = exports = {};
 
-  siteDoname = 'https://xiaolandian.leexiaohui.top/';
+  config.siteDoname = 'https://xiaolandian.leexiaohui.top/';
   return config;
 };
