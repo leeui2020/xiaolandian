@@ -47,6 +47,7 @@ module.exports = app => {
   router.post('/order/getPaymentData', authYouKe, controller.order.getPaymentData);
   router.post('/order/payFinish', authYouKe, controller.order.payFinish);
   router.post('/order/refund', authAdmin, controller.order.refund);
+  router.post('/order/consign', authAdmin, controller.order.consign);
 
   router.post('/paycode/add', authAdmin, controller.paycode.add);
   router.post('/paycode/list', authAdmin, controller.paycode.list);

@@ -86,6 +86,16 @@ class OrderController extends Controller {
     });
     await ctx.handler(await ctx.service.order.refund(ctx.request.body));
   }
+
+  // 发货
+  async consign() {
+    const { ctx } = this;
+    ctx.validate({
+      _id: { type: 'string' },
+      nu: { type: 'string' },
+    });
+    await ctx.handler(await ctx.service.order.consign(ctx.request.body));
+  }
 }
 
 module.exports = OrderController;

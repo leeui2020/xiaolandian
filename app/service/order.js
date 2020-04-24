@@ -225,6 +225,35 @@ class OrderService extends Service {
     });
     ctx.logger.info(`订单 %s 退款操作`, order.cornet);
   }
+
+  // 发货
+  async consign(opts = {}) {
+    const { ctx } = this;
+    const { _id, nu } = opts;
+    const order = await ctx.model.Order.findOne({
+      _id,
+      timeClosed: { $exists: false },
+      timeRefund: { $exists: false },
+      timePayed: { $exists: true },
+      timeConsign: { $exists: false },
+    }).populate('userId', 'email');
+    if (!order) {
+      return new Error('订单不存在或已关闭');
+    }
+    await order.updateOne({
+      $set: {
+        nu,
+        timeConsign: new Date(),
+      },
+    });
+
+    this.app.nodemailer.sendMail({
+      from: this.config.nodemailerFrom,
+      to: order.userId.email,
+      subject: `发布通知`,
+      text: `您购买的商品：【${order.productSnapShot.name}】x${order.count} 已发货；物流单号：${nu}，您可以前往平台查看实时物流。`,
+    });
+  }
 }
 
 module.exports = OrderService;

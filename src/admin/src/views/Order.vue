@@ -21,8 +21,10 @@
       <el-table-column label="操作" align="center" width="280" fixed="right">
         <el-button-group slot-scope="scope">
           <template v-if="!scope.row.timeClosed">
-            <el-button type="primary" size="mini" v-if="scope.row.timePayed && !scope.row.timeConsign">发货</el-button>
-            <el-button type="danger" size="mini" v-if="scope.row.timePayed && !scope.row.timeRefund" @click="refundBtnHandler(scope.row)">退款</el-button>
+            <template v-if="scope.row.timePayed">
+              <el-button type="primary" size="mini" v-if="!scope.row.timeConsign" @click="consignBtnHandler(scope.row)">发货</el-button>
+              <el-button type="danger" size="mini" v-if="!scope.row.timeRefund && !scope.row.timeConsign" @click="refundBtnHandler(scope.row)">退款</el-button>
+            </template>
             <el-button type="warning" size="mini" @click="closeBtnHandler(scope.row)">关闭订单</el-button>
           </template>
           <el-button type="primary" size="mini">查看</el-button>
@@ -40,6 +42,24 @@
       @current-change="getOrderList"
     ></el-pagination>
     <!-- 分页END -->
+
+    <!-- 发货对话框 -->
+    <el-dialog title="订单发货" :visible.sync="consignVisible" append-to-body>
+      <el-form ref="consignFormRef" :model="consignForm" :rules="consignRules" label-width="80px" label-position="left">
+        <el-form-item label="单号">
+          <el-input :value="consignForm.cornet" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="物流单号" prop="nu">
+          <el-input v-model="consignForm.nu"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer">
+        <el-button type="primary" :loading="consignLoading" @click="consignSubmitHandler">发货</el-button>
+        <el-button @click="consignVisible = false">取消</el-button>
+      </div>
+    </el-dialog>
+    <!-- 发货对话框END -->
   </div>
 </template>
 
@@ -56,6 +76,18 @@ export default {
       list: [],
       selection: [],
       loading: false,
+
+      // 发货对话框相关
+      consignForm: {
+        cornet: '',
+        nu: ''
+      },
+      consignRules: {
+        nu: [{ required: true, message: '请填写物流单号' }]
+      },
+      consignLoading: false,
+      consignVisible: false,
+      currentConsign: null
     }
   },
   async created() {
@@ -130,6 +162,36 @@ export default {
           await this.getOrderList(this.page)
         }
       })
+    },
+
+    // 订单发货
+    consignBtnHandler(item) {
+      this.currentConsign = item
+      this.consignForm.cornet = item.cornet
+      this.consignVisible = true
+    },
+
+    // 发货对话框关闭事件
+    consignDialogClosed() {
+      this.currentConsign = null
+      this.$refs.consignFormRef.resetFields()
+    },
+
+    // 发货对话框提交事件
+    async consignSubmitHandler() {
+      if (this.consignLoading) return
+      if (!await this.$refs.consignFormRef.validate()) return
+      this.consignLoading = true
+      const { nu } = this.consignForm
+      const { _id } = this.currentConsign
+      const { data: res } = await this.$http.post('/order/consign', { _id, nu })
+      this.consignLoading = false
+      if (res.status !== 'ok') {
+        return this.$message.error(res.errmsg)
+      }
+      this.$message.success('发货成功')
+      this.consignVisible = false
+      await this.getOrderList(this.page)
     }
   }
 }
