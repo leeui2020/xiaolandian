@@ -13,5 +13,9 @@ module.exports = {
   devServer: {
     port: 20204,
     proxy: 'http://localhost:20203'
-  }
+  },
+
+  outputDir: path.join(__dirname, '../../app/public/admin'),
+  indexPath: path.join(__dirname, '../../app/view/admin.ejs'),
+  publicPath: '/admin/'
 }

@@ -6,6 +6,7 @@ class AppBootHook {
   }
 
   async didReady() {
+    console.info(this.app.config.env)
     const ctx = await this.app.createAnonymousContext();
     // QQ邮箱验证规则
     this.app.validator.addRule('qqEmail', /^[a-zA-Z0-9_-]+@qq(\.[a-zA-Z0-9_-]+)+$/);
