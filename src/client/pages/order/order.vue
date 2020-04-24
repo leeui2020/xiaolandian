@@ -133,6 +133,7 @@
 					return showErr(res.errmsg)
 				}
 				this.confirm = true
+				await this.$utils.gotoPayment(res.data._id)
 			}
 		}
 	}

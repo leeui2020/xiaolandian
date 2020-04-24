@@ -6,7 +6,7 @@
 		<view class="defaults-title">暂无数据</view>
 	</view>
 	<!-- 订单列表 -->
-	<scroll-view style="height: 100%;" scroll-y="true" v-else>
+	<scroll-view style="height: 100%;" scroll-y="true" v-else @scrolltolower="onScrollToLower">
 		<view class="list">
 			<lee-order-item
 				:key="k"
@@ -18,6 +18,7 @@
 				@pay="payOrder(v)"
 			/>
 		</view>
+		<view class="nomore" v-if="total === list.length">- 没有更多了 -</view>
 	</scroll-view>
 </template>
 
@@ -140,30 +141,19 @@
 			
 			// 去支付
 			async payOrder(item) {
-				uni.showLoading({ title: '加载中' })
-				const { data: res } = await this.$http.post('/paycode/canUse')
-				uni.hideLoading()
-				if (res.status !== 'ok') {
-					uni.showToast({ icon: 'none', title: res.errmsg })
-					return
+				await this.$utils.gotoPayment(item._id)
+			},
+			
+			// 滚动到底部事件
+			async onScrollToLower() {
+				if (this.list.length < this.total) {
+					await this.getOrderList(this.page + 1)
 				}
-				
-				const resultHandler = payItem => {
-					uni.navigateTo({
-						url: `/pages/payment/payment?action=${payItem._id}&order=${item._id}`
-					})
-				}
-				
-				if (res.data.length === 1) {
-					resultHandler(res.data[0])
-				} else {
-					uni.showActionSheet({
-						itemList: res.data.map(v => v.title),
-						success({ tapIndex }) {
-							resultHandler(res.data[tapIndex])
-						}
-					})
-				}
+			},
+			
+			// 上拉刷新
+			async refreshData() {
+				await this.getOrderList(1, true)
 			}
 		}
 	}

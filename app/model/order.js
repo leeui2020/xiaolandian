@@ -114,8 +114,9 @@ module.exports = ({ mongoose, model }) => {
 
     // 短号生成器
     async genCornet() {
-      const total = await this.countDocuments();
-      const total16 = total.toString(16);
+      const item = await this.findOne().sort({ cornet: -1 });
+      const num = Number(`0x${item.cornet.substr(1)}`) + 1;
+      const total16 = num.toString(16);
       return `a${_.padStart(total16, 4, 0)}`;
     },
 

@@ -77,6 +77,15 @@ class OrderController extends Controller {
     });
     await ctx.handler(await ctx.service.order.payFinish(ctx.request.body));
   }
+
+  // 退款
+  async refund() {
+    const { ctx } = this;
+    ctx.validate({
+      _id: { type: 'string' },
+    });
+    await ctx.handler(await ctx.service.order.refund(ctx.request.body));
+  }
 }
 
 module.exports = OrderController;

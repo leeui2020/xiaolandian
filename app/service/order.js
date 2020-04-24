@@ -40,7 +40,7 @@ class OrderService extends Service {
       priceSum: count * product.price,
     });
     ctx.logger.info('创建了订单 %j', order);
-    return { no, cornet };
+    return { no, cornet, _id: order._id };
   }
 
   // 管理员查看订单列表
@@ -202,6 +202,28 @@ class OrderService extends Service {
       text: `单号：${order.cornet}；金额：￥${order.totalFee / 100}。`,
     });
     ctx.logger.info('订单 %s 完成支付', order.cornet);
+  }
+
+  // 管理员标记订单为已退款
+  async refund(opts = {}) {
+    const { ctx } = this;
+    const { _id } = opts;
+    const order = await ctx.model.Order.findOne({
+      _id,
+      timePayed: { $exists: true },
+      timeRefund: { $exists: false },
+      timeClosed: { $exists: false },
+    });
+    if (!order) {
+      return new Error('订单不存在或已关闭');
+    }
+    await order.updateOne({
+      $set: {
+        timeRefund: new Date(),
+        timeClosed: new Date(),
+      },
+    });
+    ctx.logger.info(`订单 %s 退款操作`, order.cornet);
   }
 }
 

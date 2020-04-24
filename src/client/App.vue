@@ -43,4 +43,13 @@
 			}
 		}
 	}
+	
+	// 没有更多了
+	.nomore {
+		$height: 60rpx;
+		text-align: center;
+		line-height: $height;
+		color: $uni-text-color-grey;
+		font-size: $text-xs;
+	}
 </style>

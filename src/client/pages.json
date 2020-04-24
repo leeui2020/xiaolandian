@@ -39,7 +39,8 @@
             "path" : "pages/order-list/order-list",
             "style" : {
 				"navigationStyle":"custom",
-				"navigationBarTitleText":"订单中心"
+				"navigationBarTitleText":"订单中心",
+				"enablePullDownRefresh": true
 			}
         }, {
             "path" : "pages/payment/payment",

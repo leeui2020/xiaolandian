@@ -20,9 +20,11 @@
       <!-- 操作 -->
       <el-table-column label="操作" align="center" width="280" fixed="right">
         <el-button-group slot-scope="scope">
-          <el-button type="primary" size="mini" v-if="scope.row.timePayed && !scope.row.timeConsign">发货</el-button>
-          <el-button type="danger" size="mini" v-if="scope.row.timePayed && !scope.row.timeRefund">退款</el-button>
-          <el-button type="warning" size="mini" v-if="!scope.row.timeClosed" @click="closeBtnHandler(scope.row)">关闭订单</el-button>
+          <template v-if="!scope.row.timeClosed">
+            <el-button type="primary" size="mini" v-if="scope.row.timePayed && !scope.row.timeConsign">发货</el-button>
+            <el-button type="danger" size="mini" v-if="scope.row.timePayed && !scope.row.timeRefund" @click="refundBtnHandler(scope.row)">退款</el-button>
+            <el-button type="warning" size="mini" @click="closeBtnHandler(scope.row)">关闭订单</el-button>
+          </template>
           <el-button type="primary" size="mini">查看</el-button>
         </el-button-group>
       </el-table-column>
@@ -107,6 +109,24 @@ export default {
             return this.$message.error(res.errmsg)
           }
           this.$message.success('关闭订单成功')
+          await this.getOrderList(this.page)
+        }
+      })
+    },
+
+    // 订单退款
+    refundBtnHandler(item) {
+      this.$confirm('是否标记订单为已退款状态？', '退款提示', {
+        type: 'warning',
+        callback: async action => {
+          if (action !== 'confirm') return
+          this.loading = true
+          const { data: res } = await this.$http.post('/order/refund', { _id: item._id })
+          this.loading = false
+          if (res.status !== 'ok') {
+            return this.$message.error(res.errmsg)
+          }
+          this.$message.success('订单退款成功')
           await this.getOrderList(this.page)
         }
       })
