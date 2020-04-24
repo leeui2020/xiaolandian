@@ -46,6 +46,7 @@ module.exports = app => {
   router.post('/order/cancel', authYouKe, controller.order.cancel);
 
   router.post('/paycode/add', authAdmin, controller.paycode.add);
+  router.post('/paycode/list', authAdmin, controller.paycode.list);
 
   router.get('/', controller.home.index);
   router.get(/\/admin(\/.+)*/, controller.home.admin);

@@ -2,7 +2,38 @@
   <div class="content">
     <el-row class="margin-bottom" type="flex" align="middle" justify="end">
       <el-button type="primary" @click="addFormVisible = true">新增二维码</el-button>
+      <el-button type="danger" :disabled="selection.length === 0">批量删除</el-button>
     </el-row>
+
+    <!-- 支付二维码列表 -->
+    <el-table class="margin-bottom" :data="list" stripe border @selection-change="selectionChangeHandler">
+      <el-table-column type="selection" width="55" fixed="left" />
+      <el-table-column prop="qrcode" label="二维码" width="120">
+        <img :src="scope.row.qrcode.src" class="qrcode" slot-scope="scope">
+      </el-table-column>
+      <el-table-column prop="title" label="描述" min-width="160" />
+      <el-table-column prop="email" label="通知邮箱" min-width="160" />
+      <el-table-column prop="isClosed" label="禁用" min-width="120">
+        <el-switch slot-scope="scope" :value="scope.row.isClosed" />
+      </el-table-column>
+      <el-table-column prop="createdAt" label="创建时间" min-width="180" :formatter="dateFormatter" />
+      <el-table-column label="操作" align="center" min-width="180" fixed="right">
+        <el-button-group slot-scope="scope">
+          <el-button type="primary" size="mini" @click="editPaycode(scope.row)">编辑</el-button>
+          <el-button type="danger" size="mini" @click="removePaycode(scope.row)">删除</el-button>
+        </el-button-group>  
+      </el-table-column>
+    </el-table>
+    <!-- 支付二维码列表END -->
+
+    <!-- 分页 -->
+    <el-pagination
+      :total="total"
+      :page-size="pagesize"
+      :current-page="page"
+      :current-change="getDataList"
+    ></el-pagination>
+    <!-- 分页END -->
 
     <!-- 新增二维码弹窗 -->
     <el-dialog title="新增二维码" :visible.sync="addFormVisible" append-to-body @closed="addFormDialogClosed">
@@ -35,6 +66,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import LeeMediaDialog from '@/components/LeeMediaDialog'
 
 export default {
@@ -44,6 +76,14 @@ export default {
   },
   data() {
     return {
+
+      // 数据相关
+      page: 1,
+      pagesize: 10,
+      total: 0,
+      list: [],
+      loading: false,
+      selection: [],
 
       // 新增二维码相关
       addForm: {
@@ -63,10 +103,35 @@ export default {
       addFormVisible: false
     }
   },
+  async created() {
+    await this.getDataList(1)
+  },
   methods: {
 
     // 获取支付二维码列表
     async getDataList(page) {
+      this.loading = true
+      const { data: res } = await this.$http.post('/paycode/list', {
+        page: Math.max(1, page),
+        pagesize: this.pagesize
+      })
+      this.loading = false
+      if (res.status === 'ok') {
+        this.page = res.data.page
+        this.pagesize = res.data.pagesize
+        this.total = res.data.total
+        this.list = res.data.list
+        this.selection = []
+      }
+    },
+
+    // 编辑支付二维码
+    editPaycode(item) {
+
+    },
+
+    // 删除支付二维码
+    removePaycode(item) {
 
     },
 
@@ -111,11 +176,23 @@ export default {
       this.$message.success('新增成功')
       this.addFormVisible = false
       await this.getDataList(1)
+    },
+
+    // 格式化日期
+    dateFormatter(row, column, cellValue) {
+      return moment(cellValue).format('YYYY/MM/DD')
+    },
+
+    // 选择列表变化事件
+    selectionChangeHandler(selection) {
+      this.selection = selection
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+  .qrcode {
+    width: 60px;
+  }
 </style>

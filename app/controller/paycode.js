@@ -13,6 +13,16 @@ class PaycodeController extends Controller {
     });
     await ctx.handler(await ctx.service.paycode.add(ctx.request.body));
   }
+
+  // 支付二维码列表
+  async list() {
+    const { ctx } = this;
+    ctx.validate({
+      page: { type: 'int', min: 1, required: false, default: 1 },
+      pagesize: { type: 'int', min: 1, required: false, default: 10 },
+    });
+    await ctx.handler(await ctx.service.paycode.list(ctx.request.body));
+  }
 }
 
 module.exports = PaycodeController;
