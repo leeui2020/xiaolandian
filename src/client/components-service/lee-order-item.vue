@@ -39,6 +39,7 @@
 						<view
 							class="order-options-item primary"
 							v-if="!item.timePayed"
+							@click="payBtnHandler"
 						>去付款</view>
 						<view
 							class="order-options-item"
@@ -79,6 +80,11 @@
 			// 派发取消事件
 			cancelBtnHandler() {
 				this.$emit('cancel')
+			},
+			
+			// 派发付款事件
+			payBtnHandler() {
+				this.$emit('pay')
 			}
 		}
 	}

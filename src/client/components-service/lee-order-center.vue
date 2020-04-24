@@ -15,6 +15,7 @@
 				v-for="(v, k) of list"
 				@remove="removeOrder(v)"
 				@cancel="cancelOrder(v)"
+				@pay="payOrder(v)"
 			/>
 		</view>
 	</scroll-view>
@@ -135,6 +136,34 @@
 						await this.getOrderList(1, true)
 					}
 				})
+			},
+			
+			// 去支付
+			async payOrder(item) {
+				uni.showLoading({ title: '加载中' })
+				const { data: res } = await this.$http.post('/paycode/canUse')
+				uni.hideLoading()
+				if (res.status !== 'ok') {
+					uni.showToast({ icon: 'none', title: res.errmsg })
+					return
+				}
+				
+				const resultHandler = payItem => {
+					uni.navigateTo({
+						url: `/pages/payment/payment?action=${payItem._id}&order=${item._id}`
+					})
+				}
+				
+				if (res.data.length === 1) {
+					resultHandler(res.data[0])
+				} else {
+					uni.showActionSheet({
+						itemList: res.data.map(v => v.title),
+						success({ tapIndex }) {
+							resultHandler(res.data[tapIndex])
+						}
+					})
+				}
 			}
 		}
 	}

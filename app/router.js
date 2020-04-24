@@ -44,11 +44,14 @@ module.exports = app => {
   router.post('/order/search', authYouKe, controller.order.search);
   router.post('/order/remove', authYouKe, controller.order.remove);
   router.post('/order/cancel', authYouKe, controller.order.cancel);
+  router.post('/order/getPaymentData', authYouKe, controller.order.getPaymentData);
+  router.post('/order/payFinish', authYouKe, controller.order.payFinish);
 
   router.post('/paycode/add', authAdmin, controller.paycode.add);
   router.post('/paycode/list', authAdmin, controller.paycode.list);
   router.post('/paycode/remove', authAdmin, controller.paycode.remove);
   router.post('/paycode/edit', authAdmin, controller.paycode.edit);
+  router.post('/paycode/canUse', authYouKe, controller.paycode.canUse);
 
   router.get('/', controller.home.index);
   router.get(/\/admin(\/.+)*/, controller.home.admin);

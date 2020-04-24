@@ -143,6 +143,66 @@ class OrderService extends Service {
       },
     });
   }
+
+  // 获取付款信息
+  async getPaymentData(opts = {}) {
+    const { ctx } = this;
+    const { orderId, paycodeId } = opts;
+    const userId = ctx.user._id;
+    const order = await ctx.model.Order.findOne({
+      userId,
+      _id: orderId,
+      timePayed: { $exists: false },
+      timeClosed: { $exists: false },
+    });
+
+    if (!order) {
+      return new Error('订单不存在或已关闭')
+    }
+
+    const paycode = await ctx.model.Paycode.findOne({ _id: paycodeId })
+      .populate('qrcode', 'fileName src');
+
+    return {
+      order,
+      paycode,
+      qrcode: paycode.qrcode.src,
+      qrcodeTitle: paycode.title,
+      totalFee: order.totalFee,      
+    };
+  }
+
+  // 客户完成支付
+  async payFinish(opts = {}) {
+    const { ctx } = this;
+    const { _id, paycodeId } = opts;
+    const userId = ctx.user._id;
+    const order = await ctx.model.Order.findOne({
+      _id,
+      userId,
+      timePayed: { $exists: false },
+      timeClosed: { $exists: false },
+    });
+    const paycode = await ctx.model.Paycode.findOne({ _id: paycodeId });
+    if (!order || !paycode) {
+      return new Error('支付信息错误');
+    }
+
+    await order.updateOne({
+      $set: {
+        payment: paycode._id,
+        timePayed: new Date(),
+      },
+    });
+
+    await this.app.nodemailer.sendMail({
+      from: this.config.nodemailerFrom,
+      to: paycode.email,
+      subject: `订单付款通知`,
+      text: `单号：${order.cornet}；金额：￥${order.totalFee / 100}。`,
+    });
+    ctx.logger.info('订单 %s 完成支付', order.cornet);
+  }
 }
 
 module.exports = OrderService;

@@ -41,6 +41,11 @@
 				"navigationStyle":"custom",
 				"navigationBarTitleText":"订单中心"
 			}
+        }, {
+            "path" : "pages/payment/payment",
+            "style" : {
+				"navigationBarTitleText":"收银台"
+			}
         }
     ],
 	"globalStyle": {

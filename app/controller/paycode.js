@@ -49,6 +49,12 @@ class PaycodeController extends Controller {
     });
     await ctx.handler(await ctx.service.paycode.edit(ctx.request.body));
   }
+
+  // 客户端查询可选支付方式
+  async canUse() {
+    const { ctx } = this;
+    await ctx.handler(await ctx.service.paycode.canUse(ctx.request.body));
+  }
 }
 
 module.exports = PaycodeController;

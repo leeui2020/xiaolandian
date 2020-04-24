@@ -57,6 +57,26 @@ class OrderController extends Controller {
     ctx.validate({ _id: { type: 'string'} });
     await ctx.handler(await ctx.service.order.cancel(ctx.request.body));
   }
+
+  // 用户查询支付详情
+  async getPaymentData() {
+    const { ctx } = this;
+    ctx.validate({
+      orderId: { type: 'string' },
+      paycodeId: { type: 'string' },
+    });
+    await ctx.handler(await ctx.service.order.getPaymentData(ctx.request.body));
+  }
+
+  // 完成付款
+  async payFinish() {
+    const { ctx } = this;
+    ctx.validate({
+      _id: { type: 'string' },
+      paycodeId: { type: 'string' },
+    });
+    await ctx.handler(await ctx.service.order.payFinish(ctx.request.body));
+  }
 }
 
 module.exports = OrderController;

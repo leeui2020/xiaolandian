@@ -52,6 +52,18 @@ class PaycodeService extends Service {
     }
     await paycode.updateOne({ $set: modify });
   }
+
+  // 客户端查询可选支付方式
+  async canUse() {
+    const { ctx } = this;
+    const list = await ctx.model.Paycode.find({ isClosed: false })
+      .select('_id title')
+      .sort({ createdAt: -1 });
+    if (list.length === 0) {
+      return new Error('暂不支持支付');
+    }
+    return list;
+  }
 }
 
 module.exports = PaycodeService;

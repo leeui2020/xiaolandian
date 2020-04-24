@@ -88,6 +88,12 @@ module.exports = ({ mongoose, model }) => {
       required: true,
     },
 
+    // 支付方式
+    payment: {
+      ref: 'Paycode',
+      type: mongoose.Schema.Types.ObjectId,
+    },
+
     // 支付时间
     timePayed: Date,
     // 发货时间
