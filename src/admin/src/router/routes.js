@@ -3,7 +3,7 @@ export default [
     name: 'root',
     path: '/',
     component: () => import('@/components/LeeFrame'),
-    redirect: '/order',
+    redirect: '/paycode',
     children: [
       {
         name: 'Index',
@@ -35,6 +35,14 @@ export default [
         component: () => import('@/views/Order'),
         meta: {
           title: '订单管理'
+        }
+      },
+      {
+        name: 'Paycode',
+        path: '/paycode',
+        component: () => import('@/views/Paycode'),
+        meta: {
+          title: '支付管理'
         }
       }
     ]
