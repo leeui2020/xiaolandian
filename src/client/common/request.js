@@ -1,7 +1,7 @@
 import url from 'url'
 import store from '@/store'
 
-const hostname = 'http://localhost:20203/'
+// const hostname = 'http://localhost:20203/'
 export default {
 	post(part, data, header = {}) {
 		return new Promise((resolve, reject) => {
@@ -9,7 +9,8 @@ export default {
 				header.token = store.state.user.token
 			}
 			uni.request({
-				url: url.resolve(hostname, part),
+				// url: url.resolve(hostname, part),
+				url: part,
 				method: 'POST',
 				data: Object.assign({}, data),
 				header: Object.assign({}, header),
