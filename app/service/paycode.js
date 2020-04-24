@@ -41,6 +41,17 @@ class PaycodeService extends Service {
       _id: { $in: _id },
     });
   }
+
+  // 编辑二维码
+  async edit(opts = {}) {
+    const { ctx } = this;
+    const { _id, modify } = opts;
+    const paycode = await ctx.model.Paycode.findOne({ _id });
+    if (!paycode) {
+      return new Error('支付二维码不存在');
+    }
+    await paycode.updateOne({ $set: modify });
+  }
 }
 
 module.exports = PaycodeService;

@@ -32,6 +32,23 @@ class PaycodeController extends Controller {
     });
     await ctx.handler(await ctx.service.paycode.remove(ctx.request.body));
   }
+
+  // 编辑
+  async edit() {
+    const { ctx } = this;
+    ctx.validate({
+      _id: { type: 'string' },
+      modify: {
+        type: 'object',
+        rules: {
+          title: { type: 'string', required: false },
+          email: { type: 'email', required: false },
+          qrcode: { type: 'string', required: false },
+        },
+      },
+    });
+    await ctx.handler(await ctx.service.paycode.edit(ctx.request.body));
+  }
 }
 
 module.exports = PaycodeController;

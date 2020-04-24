@@ -48,6 +48,7 @@ module.exports = app => {
   router.post('/paycode/add', authAdmin, controller.paycode.add);
   router.post('/paycode/list', authAdmin, controller.paycode.list);
   router.post('/paycode/remove', authAdmin, controller.paycode.remove);
+  router.post('/paycode/edit', authAdmin, controller.paycode.edit);
 
   router.get('/', controller.home.index);
   router.get(/\/admin(\/.+)*/, controller.home.admin);
