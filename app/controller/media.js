@@ -15,7 +15,7 @@ class MediaController extends Controller {
     if (!file) {
       return ctx.handler(new Error(''))
     }
-    const fileName = file.filepath.split(/\\/).reverse()[0];
+    const fileName = file.filepath.split(/\\|\//).reverse()[0];
     const movePath = path.join(this.config.baseDir, 'app/public/media', fileName);
     await fs.move(file.filepath, movePath);
     const media = await ctx.model.Media.create({
