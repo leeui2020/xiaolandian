@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <!-- 订单列表 -->
-    <el-table class="margin-bottom" :data="list" :loading="loading" stripe border>
+    <el-table class="margin-bottom" :data="list" v-loading="loading" stripe border>
       <el-table-column type="selection" width="55" fixed="left" />
       <el-table-column prop="cornet" label="订单编号" min-width="100" />
       <el-table-column label="产品名称" min-width="200">

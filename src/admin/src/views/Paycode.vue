@@ -2,11 +2,11 @@
   <div class="content">
     <el-row class="margin-bottom" type="flex" align="middle" justify="end">
       <el-button type="primary" @click="addFormVisible = true">新增二维码</el-button>
-      <el-button type="danger" :disabled="selection.length === 0">批量删除</el-button>
+      <el-button type="danger" :disabled="selection.length === 0" @click="removePaycode(selection)">批量删除</el-button>
     </el-row>
 
     <!-- 支付二维码列表 -->
-    <el-table class="margin-bottom" :data="list" stripe border @selection-change="selectionChangeHandler">
+    <el-table class="margin-bottom" :data="list" v-loading="loading" stripe border @selection-change="selectionChangeHandler">
       <el-table-column type="selection" width="55" fixed="left" />
       <el-table-column prop="qrcode" label="二维码" width="120">
         <img :src="scope.row.qrcode.src" class="qrcode" slot-scope="scope">
@@ -20,7 +20,7 @@
       <el-table-column label="操作" align="center" min-width="180" fixed="right">
         <el-button-group slot-scope="scope">
           <el-button type="primary" size="mini" @click="editPaycode(scope.row)">编辑</el-button>
-          <el-button type="danger" size="mini" @click="removePaycode(scope.row)">删除</el-button>
+          <el-button type="danger" size="mini" @click="removePaycode([scope.row])">删除</el-button>
         </el-button-group>  
       </el-table-column>
     </el-table>
@@ -131,8 +131,23 @@ export default {
     },
 
     // 删除支付二维码
-    removePaycode(item) {
-
+    removePaycode(list) {
+      const _id = list.map(item => item._id)
+      if (_id.length === 0) return
+      this.$confirm('是否删除支付二维码？', '删除提示', {
+        type: 'warning',
+        callback: async action => {
+          if (action !== 'confirm') return
+          this.loading = true
+          const { data: res } = await this.$http.post('/paycode/remove', { _id })
+          this.loading = false
+          if (res.status !== 'ok') {
+            return this.$message.error(res.errmsg)
+          }
+          this.$message.success('删除成功')
+          await this.getDataList(this.list.length > 1 ? this.page : this.page - 1)
+        }
+      })
     },
 
     // 打开媒体库

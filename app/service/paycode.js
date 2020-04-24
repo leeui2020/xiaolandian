@@ -32,6 +32,15 @@ class PaycodeService extends Service {
     });
     return { page, pagesize, total, list };
   }
+
+  // 删除支付二维码
+  async remove(opts = {}) {
+    const { ctx } = this;
+    const { _id } = opts;
+    await ctx.model.Paycode.remove({
+      _id: { $in: _id },
+    });
+  }
 }
 
 module.exports = PaycodeService;

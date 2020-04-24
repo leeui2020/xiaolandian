@@ -23,6 +23,15 @@ class PaycodeController extends Controller {
     });
     await ctx.handler(await ctx.service.paycode.list(ctx.request.body));
   }
+
+  // 删除支付二维码
+  async remove() {
+    const { ctx } = this;
+    ctx.validate({
+      _id: { type: 'array', itemType: 'string' },
+    });
+    await ctx.handler(await ctx.service.paycode.remove(ctx.request.body));
+  }
 }
 
 module.exports = PaycodeController;
