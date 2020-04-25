@@ -1,3 +1,5 @@
+import md5 from 'md5'
+
 // 获取Token
 export function getToken() {
   return sessionStorage.getItem('token')
@@ -14,7 +16,7 @@ export function setToken(token) {
 
 // 获取存储数据
 export function getStorage(key, defaults) {
-  const item = localStorage.getItem(key)
+  const item = localStorage.getItem(md5(`ADMIN/${key}`))
   try {
     const value = JSON.parse(item)
     return value || defaults
@@ -25,6 +27,7 @@ export function getStorage(key, defaults) {
 
 // 设置存储数据
 export function setStorage(key, value) {
+  key = md5(`ADMIN/${key}`)
   if (value === null) {
     localStorage.removeItem(key)
   } else {
