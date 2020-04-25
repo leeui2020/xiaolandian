@@ -44,6 +44,14 @@ export default [
         meta: {
           title: '支付管理'
         }
+      },
+      {
+        name: 'YouhuiquanModel',
+        path: '/youhuiquan/model',
+        component: () => import('@/views/YouhuiquanModel'),
+        meta: {
+          title: '优惠券模板管理'
+        }
       }
     ]
   },

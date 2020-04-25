@@ -21,8 +21,8 @@
 		<!-- 操作 -->
 		<view class="options">
 			<button type="primary" @click="loginBtnHandler">登录</button>
-			<button type="warn" @click="gotoRegistPage">注册</button>
 			<button type="default" @click="youkeLogin">游客登录</button>
+			<button type="warn" @click="gotoRegistPage">注册</button>
 		</view>
 		<!-- 操作END -->
 	</view>

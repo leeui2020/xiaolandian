@@ -74,7 +74,8 @@
     },
     "h5" : {
         "devServer" : {
-            "port" : 20205
+            "port" : 20205,
+			"proxy": "http://localhost:20203"
         },
         "router" : {
             "mode" : "history",

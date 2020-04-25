@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<lee-tabs ref="tabs" :tabs="tabs">
+		<lee-tabs ref="tabs" :tabs="tabs" :defaultIndex="defaultIndex">
 			<!-- 待支付订单 -->
 			<LeeOrderCenter ref="content0" :status="0" slot="content-0"></LeeOrderCenter>
 			<!-- 待发货订单 -->
@@ -24,7 +24,8 @@
 		},
 		data() {
 			return {
-				tabs: ['待支付', '待发货', '已发货', '全部']
+				tabs: ['待支付', '待发货', '已发货', '全部'],
+				defaultIndex: Number(this.$route.query.index || 0)
 			}
 		},
 		async onPullDownRefresh() {

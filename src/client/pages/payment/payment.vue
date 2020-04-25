@@ -77,7 +77,10 @@
 							showCancel: false,
 							success: () => {
 								this.submited = true
-								uni.navigateBack()
+								// uni.navigateBack()
+								uni.redirectTo({
+									url: '/pages/order-list/order-list?index=1'
+								})
 							}
 						})
 					}

@@ -20,6 +20,17 @@ export default [
     icon: 'fa fa-qrcode'
   },
   {
+    id: '/youhuiquan',
+    name: '优惠券管理',
+    icon: 'fa fa-ticket',
+    children: [
+      {
+        id: '/youhuiquan/model',
+        name: '模板管理'
+      }
+    ]
+  },
+  {
     id: '/media',
     name: '媒体库',
     icon: 'fa fa-archive'

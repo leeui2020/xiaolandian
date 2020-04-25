@@ -83,5 +83,11 @@ module.exports = appInfo => {
     },
   };
   config.nodemailerFrom = '小蓝店<game_saolei@sina.com>';
+
+  // 优惠券类型
+  config.youhuiquanTypes = {
+    ZHEKOU: 'zhekou',
+    MANJIAN: 'manjian',
+  };
   return config;
 };
