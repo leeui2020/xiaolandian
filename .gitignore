@@ -9,3 +9,4 @@ appveyor.yml
 jsconfig.json
 package-lock.json
 unpackage
+scripts
