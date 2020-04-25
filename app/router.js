@@ -57,6 +57,6 @@ module.exports = app => {
   router.post('/paycode/canUse', authYouKe, controller.paycode.canUse);
 
   router.get('/', controller.home.index);
-  router.get(/\/h5(\/.+)*/, controller.home.h5);
-  router.get(/\/admin(\/.+)*/, controller.home.admin);
+  router.get(/\/h5(\/.*)*/, controller.home.h5);
+  router.get(/\/admin(\/.*)*/, controller.home.admin);
 };
